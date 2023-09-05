@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Raspberry Pi Configuration</title>
+</head>
+<body>
+    <h1>Configure Wi-Fi</h1>
+    <form action="/configure_wifi" method="post">
+        SSID: <input type="text" name="ssid"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" value="Submit">
+    </form>
+    
+    <h1>Run Script</h1>
+    <a href="/run_scripts">Run Scripts</a>
+    
+    <h1>Reboot Raspberry Pi</h1>
+    <form action="/reboot" method="post">
+        <input type="submit" value="Reboot">
+    </form>
+</body>
+</html>
