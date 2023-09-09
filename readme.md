@@ -32,7 +32,7 @@ cd my_flask_project
 
 ### 3. Create the Flask App
 
-Create a Python script (e.g., `app.py`) for your Flask app in the project directory. You can use the sample code provided in the previous responses as a starting point.
+Create a Python script (e.g., `ssid.py`) for your Flask app in the project directory. You can use the sample code provided in the previous responses as a starting point.
 
 ### 4. Create HTML Templates
 
@@ -40,14 +40,14 @@ Inside your project directory, create a subdirectory named `templates` to store 
 
 ### 5. Configure Routes
 
-In your `app.py` script, configure the Flask routes for configuring Wi-Fi, running scripts, and rebooting the Pi. Ensure you have routes for `/configure_wifi`, `/run_scripts`, and `/reboot` as shown in the example code.
+In your `ssid.py` script, configure the Flask routes for configuring Wi-Fi, running scripts, and rebooting the Pi. Ensure you have routes for `/configure_wifi`, `/run_scripts`, and `/reboot` as shown in the example code.
 
 ### 6. Run the Flask App
 
 Run your Flask app by executing the following command inside your project directory:
 
 ```bash
-python app.py
+python ssid.py
 ```
 
 Your Flask app should now be running. You can access it by connecting to the Pi's access point and entering the Pi's IP address in your web browser.
@@ -60,6 +60,7 @@ Ensure that the Python scripts you want to run at every reboot are executable. Y
 chmod +x /path/to/your/script1.py
 chmod +x /path/to/your/script2.py
 chmod +x /path/to/your/script3.py
+chmod +x /path/to/your/ssid.py
 ```
 
 ### 8. Configure Scripts to Run at Boot
@@ -76,6 +77,7 @@ Add the following lines before the `exit 0` line, replacing `/path/to/your/scrip
 python /path/to/your/script1.py &
 python /path/to/your/script2.py &
 python /path/to/your/script3.py &
+python /path/to/your/ssid.py &
 ```
 
 Save and exit the text editor.
@@ -127,7 +129,7 @@ Replace `192.168.1.100` with the actual IP address of your Raspberry Pi.
 Run your Flask app by executing the following command inside your project directory:
 
 ```bash
-python app.py
+python ssid.py
 ```
 
 Your Flask app should now be running. You can access it by entering `http://raspberrypi.local` in your web browser.
