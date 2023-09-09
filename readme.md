@@ -105,5 +105,30 @@ Your Flask app should start automatically after the reboot, and your scripts wil
 ```
 
 Please replace `/path/to/your/script1.py`, `/path/to/your/script2.py`, and `/path/to/your/script3.py` with the actual paths to your Python scripts in the "Make Scripts Executable" and "Configure Scripts to Run at Boot" sections.
+```
 
-This README provides step-by-step instructions for setting up your Raspberry Pi Zero with Flask and running scripts at every reboot. It also includes important security considerations for your project.
+### 1. Set Up a Custom Domain
+
+Edit the `hosts` file on the devices that need to access the Pi's web interface. 
+
+- On macOS and Linux, you can edit `/etc/hosts`.
+
+Add a line like this:
+
+```
+192.168.1.100  raspberrypi.local
+```
+
+Replace `192.168.1.100` with the actual IP address of your Raspberry Pi.
+
+
+### 2. Run the Flask App
+
+Run your Flask app by executing the following command inside your project directory:
+
+```bash
+python app.py
+```
+
+Your Flask app should now be running. You can access it by entering `http://raspberrypi.local` in your web browser.
+
