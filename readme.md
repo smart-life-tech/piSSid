@@ -118,10 +118,10 @@ Edit the `hosts` file on the devices that need to access the Pi's web interface.
 Add a line like this:
 
 ```
-192.168.1.100  raspberrypi.local
+192.168.4.1  raspberrypi.local
 ```
 
-Replace `192.168.1.100` with the actual IP address of your Raspberry Pi.
+Replace `192.168.4.1` with the actual IP address of your Raspberry Pi.
 
 
 ### 2. Run the Flask App
@@ -134,3 +134,152 @@ python ssid.py
 
 Your Flask app should now be running. You can access it by entering `http://raspberrypi.local` in your web browser.
 
+## to set up the webserver to be running the access point mode we need to the following
+### If you want your Raspberry Pi to behave as a Wi-Fi hotspot that users can connect to in order to configure Wi-Fi settings, you'll need to set up your Pi as an Access Point (AP) with a captive portal. A captive portal is a web page that users are redirected to when they connect to the Pi's hotspot, allowing them to configure Wi-Fi settings.
+
+# Here are the steps to set up your Raspberry Pi as a Wi-Fi hotspot with a captive portal for configuring Wi-Fi settings:
+
+1. **Install Required Packages**:
+
+   First, make sure you have the necessary packages installed:
+
+   ```bash
+   sudo apt-get install hostapd dnsmasq
+   ```
+
+2. **Configure Hostapd**:
+
+   Edit the `hostapd` configuration file:
+
+   ```bash
+   sudo nano /etc/hostapd/hostapd.conf
+   ```
+
+   Add the following content to the `hostapd.conf` file, replacing `your_ssid` and `your_password` with your desired SSID and password:
+
+   ```text
+   interface=wlan0
+   driver=nl80211
+   ssid=your_ssid
+   hw_mode=g
+   channel=7
+   wmm_enabled=0
+   macaddr_acl=0
+   auth_algs=1
+   ignore_broadcast_ssid=0
+   wpa=2
+   wpa_passphrase=your_password
+   wpa_key_mgmt=WPA-PSK
+   wpa_pairwise=TKIP
+   rsn_pairwise=CCMP
+   ```
+
+   Save the file and exit.
+
+3. **Configure DHCP and DNS with Dnsmasq**:
+
+   Edit the `dnsmasq` configuration file:
+
+   ```bash
+   sudo nano /etc/dnsmasq.conf
+   ```
+
+   Add or modify the following lines :
+
+   ```text
+   interface=wlan0
+   dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+   ```
+
+   Save the file and exit.
+
+4. **Enable IPv4 Forwarding**:
+
+   Edit the sysctl configuration:
+
+   ```bash
+   sudo nano /etc/sysctl.conf
+   ```
+
+   Uncomment the line that says `net.ipv4.ip_forward=1`. Save and exit.
+
+   Activate the changes:
+
+   ```bash
+   sudo sysctl -p
+   ```
+
+5. **Configure Network Interfaces**:
+
+   Edit the `/etc/network/interfaces` file:
+
+   ```bash
+   sudo nano /etc/network/interfaces
+   ```
+
+   Modify the `wlan0` section as follows:
+
+   ```text
+   auto wlan0
+   iface wlan0 inet static
+       address 192.168.4.1
+       netmask 255.255.255.0
+   ```
+
+   Save the file and exit.
+
+6. **Create a Captive Portal Web Page we already have this so you can skip**:
+
+   Create an HTML file for your captive portal page, for example, `index.html`. we customize this page to allow users to input Wi-Fi settings and submit the form. Place it in an easily accessible location on your Pi.
+
+7. **Configure Captive Portal Redirection**:
+
+   Create a `dnsmasq` configuration file for captive portal redirection:
+
+   ```bash
+   sudo nano /etc/dnsmasq.d/redirect.conf
+   ```
+
+   Add the following line, replacing `/path/to/your/index.html` with the actual path to your captive portal HTML file:
+
+   ```text
+   address=/#/192.168.4.1
+   ```
+   
+   Save the file and exit.
+
+8. **Restart Services**:
+
+   Restart the `dnsmasq` and `hostapd` services:
+
+   ```bash
+   sudo service dnsmasq restart
+   sudo service hostapd restart
+   ```
+
+9. **Start at Boot**:
+
+   To ensure that the hotspot configuration starts at boot, you can add the service restart commands to the `/etc/rc.local` file:
+
+   ```bash
+   sudo nano /etc/rc.local
+   ```
+
+   Add the following lines before `exit 0`:
+
+   ```bash
+   service dnsmasq restart
+   service hostapd restart
+   ```
+
+   Save and exit the file.
+
+10. **Reboot Your Raspberry Pi**:
+
+    After completing these steps, reboot your Raspberry Pi:
+
+    ```bash
+    sudo reboot
+    ```
+
+`Your Raspberry Pi should now function as a Wi-Fi hotspot with a captive portal, allowing users to connect and configure Wi-Fi settings through the captive portal web page. They can connect to the hotspot SSID and access the portal using a web browser.`
