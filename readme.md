@@ -283,3 +283,46 @@ Your Flask app should now be running. You can access it by entering `http://rasp
     ```
 
 `Your Raspberry Pi should now function as a Wi-Fi hotspot with a captive portal, allowing users to connect and configure Wi-Fi settings through the captive portal web page. They can connect to the hotspot SSID and access the portal using a web browser.`
+
+### troubleshooting
+It appears that you're facing some issues with package installation and service enabling. Let's address these issues step by step:
+
+1. **Package Installation Error**:
+
+   It seems that there was a problem fetching the `hostapd` package due to a "400 Bad Request" error. This can sometimes happen if the package repository is experiencing issues or if there's a network problem.
+
+   To resolve this, you can try running the following commands to update the package lists and try installing the packages again:
+
+   ```bash
+   sudo apt-get update
+   sudo apt-get install hostapd dnsmasq
+   ```
+
+   If you still encounter issues, consider changing the package repository to a different mirror. You can edit the `/etc/apt/sources.list` file to specify a different mirror. Here's an example of how to do it:
+
+   ```bash
+   sudo nano /etc/apt/sources.list
+   ```
+
+   Inside the file, replace the existing mirror with a different one. For example, you can use the default Raspbian mirror by changing the line to:
+
+   ```
+   deb http://archive.raspbian.org/raspbian bullseye main contrib non-free rpi
+   ```
+
+   Save the file and try running the package installation commands again.
+
+2. **Service Enabling Error**:
+
+   The error message "Failed to enable unit: Unit file dnsmasq.service does not exist" and "Failed to enable unit: Unit file hostapd.service does not exist" suggests that the service unit files for `dnsmasq` and `hostapd` are missing.
+
+   This typically happens when the packages are not installed correctly. To resolve this, make sure you've successfully installed `dnsmasq` and `hostapd` as mentioned in the previous step. If you've installed them, they should provide the necessary service unit files.
+
+   After reinstalling the packages, you can try enabling the services again:
+
+   ```bash
+   sudo systemctl enable dnsmasq
+   sudo systemctl enable hostapd
+   ```
+
+   
