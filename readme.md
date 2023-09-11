@@ -404,11 +404,13 @@ To resolve this issue and ensure that DNS resolution works correctly, you can fo
    Look for lines that specify DNS server addresses, for example:
 
    ```conf
+   interface=wlan0
+   dhcp-range=192.168.4.2,192.168.4.254,255.255.255.0,24h
    server=8.8.8.8
    server=8.8.4.4
    ```
 
-   Ensure that these lines are present, and the DNS server addresses are valid. You can use Google's DNS servers (`8.8.8.8` and `8.8.4.4`) as shown in the example.
+   Ensure that these lines are present if they are  not presnt add it to mak sure to look like this, and the DNS server addresses are valid. You can use Google's DNS servers (`8.8.8.8` and `8.8.4.4`) as shown in the example.
 
 2. **Restart `dnsmasq`**:
 
