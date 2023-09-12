@@ -454,3 +454,78 @@ To resolve this issue and ensure that DNS resolution works correctly, you can fo
    If DNS resolution is working correctly, you should be able to ping Google successfully.
 
 By following these steps and ensuring that `dnsmasq` is correctly configured to use valid DNS servers, you should be able to resolve the DNS resolution issue on your Raspberry Pi.
+
+### If your Raspberry Pi's Wi-Fi connection is established, but you can't access the internet, it suggests there might be an issue with the routing or DNS configuration. Let's troubleshoot this further:
+
+1. **Check Routing**:
+
+   Confirm that the routing is set up correctly to allow internet traffic to flow through the Wi-Fi connection. Run the following command to check the routing table:
+
+   ```bash
+   route -n
+   ```
+
+   Look for a default route (`0.0.0.0`) pointing to your Wi-Fi interface (`wlan0`). If it's not there, you may need to add it. Use the following command to add a default route:
+
+   ```bash
+   sudo route add default gw 192.168.4.1 wlan0
+   ```
+
+   Replace `192.168.4.1` with the IP address of your Raspberry Pi's access point.
+
+2. **DNS Configuration**:
+
+   Check the DNS configuration to ensure that DNS resolution is working. Open the `/etc/resolv.conf` file:
+
+   ```bash
+   cat /etc/resolv.conf
+   ```
+
+   It should contain the IP addresses of DNS servers, such as Google's DNS servers (`8.8.8.8` and `8.8.4.4`). If it doesn't, you can add them manually:
+
+   ```bash
+   sudo nano /etc/resolv.conf
+   ```
+
+   Add the following lines:
+
+   ```
+   nameserver 8.8.8.8
+   nameserver 8.8.4.4
+   ```
+
+   Save the file and exit the text editor.
+
+3. **Flush IPTables Rules**:
+
+   Sometimes, firewall rules or previous IPTables configurations can interfere with internet access. You can flush all IPTables rules to start fresh:
+
+   ```bash
+   sudo iptables -F
+   sudo iptables -t nat -F
+   ```
+
+4. **Restart Services**:
+
+   After making changes, it's a good practice to restart the `hostapd` and `dnsmasq` services:
+
+   ```bash
+   sudo systemctl restart hostapd
+   sudo systemctl restart dnsmasq
+   ```
+
+5. **Reboot**:
+
+   Reboot your Raspberry Pi to ensure all changes take effect:
+
+   ```bash
+   sudo reboot
+   ```
+
+After going through these steps, try to access the internet again from a device connected to your Raspberry Pi's access point. If the issue persists, please check the logs for any error messages by running:
+
+```bash
+journalctl -xe
+```
+
+This should help you identify any specific issues that might be preventing internet access.
