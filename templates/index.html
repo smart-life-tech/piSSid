@@ -5,15 +5,17 @@
 </head>
 <body>
     <h1>Configure Wi-Fi</h1>
-    <form action="/configure_wifi" method="post">
-        SSID: <input type="text" name="ssid"><br>
-        Password: <input type="password" name="password"><br>
+    <form action="/configure_and_reboot" method="post">
+        <label for="ssid">SSID:</label><br>
+        <input type="text" id="ssid" name="ssid" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
         <input type="submit" value="Submit">
     </form>
-    
-    <h1>Run Script</h1>
+
+    <h1>Run Scripts</h1>
     <a href="/run_scripts">Run Scripts</a>
-    
+
     <h1>Reboot Raspberry Pi</h1>
     <form action="/reboot" method="post">
         <input type="submit" value="Reboot">
